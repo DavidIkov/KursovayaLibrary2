@@ -25,8 +25,8 @@ public:
     constexpr CArrayView(std::array<T, L> const& arr) noexcept
         :Data((T*)&*arr.begin()), Len(L) {}
 
-    template<size_t L> constexpr CArrayView(T (&&arr)[L]) noexcept:Data(arr), Len(L) {};
-    template<size_t L> constexpr CArrayView(T (&arr)[L]) noexcept:Data(arr), Len(L) {};
+    constexpr CArrayView(std::initializer_list<T> const& list) noexcept :
+        Data((T*)list.begin()), Len(list.size()) {}
 
     T& operator[](size_t i) noexcept { return Data[i]; }
     T const& operator[](size_t i) const noexcept { return Data[i]; }

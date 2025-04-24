@@ -26,6 +26,7 @@ namespace KL2::Graphics::Primitives {
         ID_t gID() const noexcept { return ID; }
         operator ID_t() const noexcept { return ID; }
 
+        KL2_API virtual void ReserveData(size_t len, const EBufferReadWriteMode bufferReadWriteMode);
         KL2_API virtual void SetData(const CArrayView<uint8_t>& data, const EBufferReadWriteMode bufferReadWriteMode);
 
         KL2_API void SetSubData(size_t offsetInBytes, const CArrayView<uint8_t>& data);

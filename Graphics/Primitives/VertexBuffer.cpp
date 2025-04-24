@@ -40,6 +40,10 @@ static unsigned int _GetVBUsageForGL(CVertexBuffer::EBufferReadWriteMode usage) 
     }
     return 0;
 }
+void CVertexBuffer::ReserveData(size_t len, const EBufferReadWriteMode bufferReadWriteMode) {
+    Bind();
+    glSC(glBufferData(GL_ARRAY_BUFFER, len, nullptr, _GetVBUsageForGL(bufferReadWriteMode)));
+}
 void CVertexBuffer::SetData(const CArrayView<uint8_t>& data, const EBufferReadWriteMode bufferReadWriteMode) {
     Bind();
     glSC(glBufferData(GL_ARRAY_BUFFER, data.GetLen(), data.GetData(), _GetVBUsageForGL(bufferReadWriteMode)));

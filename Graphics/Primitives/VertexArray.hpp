@@ -37,17 +37,15 @@ namespace KL2::Graphics::Primitives {
             you want to have vec2 then this should be 2, vec3 then 3 and etc,
             if just 1 value then 1 by same logic */
             size_t ComponentsAmount;
-            size_t FirstElementByteOffset;
-            /* byte offset representing where is next value will be located */
-            size_t ByteOffsetToNextElement;
+            size_t FirstAttributeByteOffset;
+            /*byte offset representing where is next value will be located */
+            size_t ByteOffsetToNextAttribute;
             enum class EDataTypeInMemory :uint8_t {
                 Byte, UnsignedByte, Float, Int, UnsignedInt, Double
-            };
-            EDataTypeInMemory DataTypeInMemory;
+            } DataTypeInMemory;
             enum class EDataTypeForReadingOnGPU :uint8_t {
                 Float, Int, Double
-            };
-            EDataTypeForReadingOnGPU DataTypeForReadingOnGPU;
+            } DataTypeForReadingOnGPU;
         };
 
         KL2_API CVertexArray();

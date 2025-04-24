@@ -48,13 +48,13 @@ void CVertexArray::SetAttribute(size_t attribInd, const SAttributeData& attribDa
 
     switch (attribData.DataTypeForReadingOnGPU) {
     case SAttributeData::EDataTypeForReadingOnGPU::Float: {
-        glSC(glVertexAttribPointer(attribInd, attribData.ComponentsAmount, glDataTypeOnCPU, attribData.Normalize, attribData.ByteOffsetToNextElement, (const void*)(unsigned long long int)attribData.FirstElementByteOffset));
+        glSC(glVertexAttribPointer(attribInd, attribData.ComponentsAmount, glDataTypeOnCPU, attribData.Normalize, attribData.ByteOffsetToNextAttribute, (const void*)(unsigned long long int)attribData.FirstAttributeByteOffset));
         break;
     } case SAttributeData::EDataTypeForReadingOnGPU::Int: {
-        glSC(glVertexAttribIPointer(attribInd, attribData.ComponentsAmount, glDataTypeOnCPU, attribData.ByteOffsetToNextElement, (const void*)attribData.FirstElementByteOffset));
+        glSC(glVertexAttribIPointer(attribInd, attribData.ComponentsAmount, glDataTypeOnCPU, attribData.ByteOffsetToNextAttribute, (const void*)attribData.FirstAttributeByteOffset));
         break;
     } case SAttributeData::EDataTypeForReadingOnGPU::Double: {
-        glSC(glVertexAttribLPointer(attribInd, attribData.ComponentsAmount, glDataTypeOnCPU, attribData.ByteOffsetToNextElement, (const void*)attribData.FirstElementByteOffset));
+        glSC(glVertexAttribLPointer(attribInd, attribData.ComponentsAmount, glDataTypeOnCPU, attribData.ByteOffsetToNextAttribute, (const void*)attribData.FirstAttributeByteOffset));
         break;
     }
     }
