@@ -30,7 +30,7 @@ namespace KL2::Graphics::Primitives {
             EDownscalingFilterFunc DownscalingFilt = EDownscalingFilterFunc::LinearMipmapLinear;
             EUpscalingFilterFunc UpscalingFilt = EUpscalingFilterFunc::Linear;
             EDepthStencilReadMode DepthStencilReadMode = EDepthStencilReadMode::Depth;
-            Vector<4, ESwizzleMask> SwizzleMask = Vector<4, ESwizzleMask>(ESwizzleMask::Red, ESwizzleMask::Green, ESwizzleMask::Blue, ESwizzleMask::Alpha);
+            Vector<4, ESwizzleMask> SwizzleMask = Vector<4, ESwizzleMask>{ESwizzleMask::Red, ESwizzleMask::Green, ESwizzleMask::Blue, ESwizzleMask::Alpha};
 
         };
         struct SDataSettings {

@@ -138,7 +138,7 @@ namespace KL2::Graphics::Primitives {
         struct SScissorTest {
             bool Enabled = false;
             //default value of size should be size of window, but making this true is not all that easy, so its just 100 by 100 so you can notice this instantly
-            Vector2U Offset = Vector2U(0u), Size = Vector2U(100u, 100u);
+            Vector2U Offset = Vector2U(0u), Size = Vector2U{ 100u, 100u };
 
             KL2_API static void UpdEnabled(bool enabled);
             KL2_API static void UpdOffsetAndBase(Vector2U offset, Vector2U size);

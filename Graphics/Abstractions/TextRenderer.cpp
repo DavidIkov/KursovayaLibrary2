@@ -16,7 +16,7 @@ unsigned short GA::CTextRenderer::AmountOfInstances = 0;
 
 #ifndef KL2_DONT_USE_FREE_TYPE
 GA::CTextRenderer::CTextRenderer(const char* vertexShaderDir, const char* fragmentShaderDir) :TextPreset{
-            GP::SRenderingPreset::SColors{ Vector4B(true),Vector4F(0.f,0.f,0.f,1.f),{ GP::SRenderingPreset::SColors::EColorOutput::ColorAttachment0 } },
+            GP::SRenderingPreset::SColors{ Vector4B(true),Vector4F{0.f,0.f,0.f,1.f},{ GP::SRenderingPreset::SColors::EColorOutput::ColorAttachment0 } },
             GP::SRenderingPreset::SBlending{true,Vector4F(0.f),GP::SRenderingPreset::SBlending::BlendingFuncValE::Src0Alpha,
             GP::SRenderingPreset::SBlending::BlendingFuncValE::OneMinusSrc0Alpha} } {
 
@@ -79,15 +79,15 @@ GA::CTextRenderer::SFont::~SFont() {
 }
 
 static constexpr GP::CTexture::SSettings TextureSettings{
-                    Vector<3,GP::CTexture::SSettings::EWrapType>(
+                    Vector<3,GP::CTexture::SSettings::EWrapType>{
                         GP::CTexture::SSettings::EWrapType::ClampToEdge,GP::CTexture::SSettings::EWrapType::ClampToEdge,
-                        GP::CTexture::SSettings::EWrapType::ClampToEdge),
+                        GP::CTexture::SSettings::EWrapType::ClampToEdge},
                     GP::CTexture::SSettings::EDownscalingFilterFunc::Linear,GP::CTexture::SSettings::EUpscalingFilterFunc::Linear,
                     GP::CTexture::SSettings::EDepthStencilReadMode::Depth };
 static constexpr GP::CTexture::SDataSettings TextureDataSettings{ GP::CTexture::SDataSettings::EDataFormatOnGPU::R8UN,
                     GP::CTexture::SDataSettings::EDataFormatOnCPU::R,GP::CTexture::SDataSettings::EDataTypeOnCPU::UnsignedByte };
 GA::CTextRenderer::SFont::SFont(GuardFromUser, unsigned int characterSize, const char* fontDir, const char32_t* chars) :
-    Texture(GP::CTexture::EDimensions::Two, Vector3U(0, 0, 0), nullptr, 0, TextureSettings, TextureDataSettings)
+    Texture(GP::CTexture::EDimensions::Two, Vector3U{0u, 0u, 0u}, nullptr, 0, TextureSettings, TextureDataSettings)
 { 
     FreeTypeFace = new FT_Face;
 
@@ -145,10 +145,10 @@ GA::CTextRenderer::SFont::SFont(GuardFromUser, unsigned int characterSize, const
 
         Characters.emplace(Characters.begin() + std::distance(Characters.begin(), insertIter), SCharacter{
             unicodeInd,
-            Vector2U(face->glyph->bitmap.width, face->glyph->bitmap.rows),
-            Vector2I(face->glyph->bitmap_left, face->glyph->bitmap_top),
+            Vector2U{face->glyph->bitmap.width, face->glyph->bitmap.rows},
+            Vector2I{face->glyph->bitmap_left, face->glyph->bitmap_top},
             (unsigned int)face->glyph->advance.x / 64,
-            Vector2F(0.f,0.f),0
+            Vector2F{0.f,0.f},0
             });
     }
 
@@ -161,7 +161,7 @@ GA::CTextRenderer::SFont::SFont(GuardFromUser, unsigned int characterSize, const
         for (unsigned int ci = 0; ci < Characters.size(); ci++) {
             SCharacter& char_ = Characters[ci];
             char_.XOffsetInTexture = xOffset / (float)totalXSize;
-            char_.SizeInTexture = Vector2F(char_.Size[0] / (float)totalXSize, char_.Size[1] / (float)maxHeight);
+            char_.SizeInTexture = Vector2F{char_.Size[0] / (float)totalXSize, char_.Size[1] / (float)maxHeight};
             xOffset += char_.Size[0] + 1;
         }
     }
@@ -180,7 +180,7 @@ GA::CTextRenderer::SFont::SFont(GuardFromUser, unsigned int characterSize, const
 
     glSC(glPixelStorei(GL_UNPACK_ALIGNMENT, 1)); // disable byte-alignment restriction
 
-    Texture = GP::CTexture(GP::CTexture::EDimensions::Two, Vector3U(totalXSize, maxHeight, 0u), &*textureBuffer.begin(), 0, TextureSettings, TextureDataSettings);
+    Texture = GP::CTexture(GP::CTexture::EDimensions::Two, Vector3U{totalXSize, maxHeight, 0u}, &*textureBuffer.begin(), 0, TextureSettings, TextureDataSettings);
 
     glSC(glPixelStorei(GL_UNPACK_ALIGNMENT, 4)); // enable byte-alignment back
 
@@ -241,7 +241,7 @@ void GA::CTextRenderer::RenderText(const SFont& font, const wchar_t* text, Vecto
     float localPixelsToTexScaleByX = localPixelsToTexPixels / pixelsInTexture[0] * 2;
     float localPixelsToTexScaleByY = localPixelsToTexPixels / pixelsInTexture[1] * 2;
 
-    Vector2F realTextBoxSize(fullLocalXSize * localPixelsToTexScaleByX, fullLocalYSize * localPixelsToTexScaleByY);
+    Vector2F realTextBoxSize{fullLocalXSize * localPixelsToTexScaleByX, fullLocalYSize * localPixelsToTexScaleByY};
 
     Vector2F scaledLocalOffset = ((localOffset + 1) / 2) * -realTextBoxSize;
 
@@ -252,16 +252,16 @@ void GA::CTextRenderer::RenderText(const SFont& font, const wchar_t* text, Vecto
 
         const SFont::SCharacter& char_ = font.Characters[charsInds[ci] - 1];
         
-        Vector2F lbp(pos[0] + xOffset + char_.Bearing[0] * localPixelsToTexScaleByX, 
-            pos[1] + (font.MaxCharacterDown - ((int)char_.Size[1] - char_.Bearing[1])) * localPixelsToTexScaleByY);
-        Vector2F rbp(lbp[0] + char_.Size[0] * localPixelsToTexScaleByX, lbp[1]);
-        Vector2F ltp(lbp[0], lbp[1] + char_.Size[1] * localPixelsToTexScaleByY);
-        Vector2F rtp(rbp[0], ltp[1]);
+        Vector2F lbp{ pos[0] + xOffset + char_.Bearing[0] * localPixelsToTexScaleByX,
+            pos[1] + (font.MaxCharacterDown - ((int)char_.Size[1] - char_.Bearing[1])) * localPixelsToTexScaleByY };
+        Vector2F rbp{lbp[0] + char_.Size[0] * localPixelsToTexScaleByX, lbp[1]};
+        Vector2F ltp{lbp[0], lbp[1] + char_.Size[1] * localPixelsToTexScaleByY};
+        Vector2F rtp{rbp[0], ltp[1]};
 
-        Vector2F lbc(char_.XOffsetInTexture, 0.f);
-        Vector2F rbc(lbc[0] + char_.SizeInTexture[0], 0.f);
-        Vector2F ltc(lbc[0], char_.SizeInTexture[1]);
-        Vector2F rtc(rbc[0], ltc[1]);
+        Vector2F lbc{char_.XOffsetInTexture, 0.f};
+        Vector2F rbc{lbc[0] + char_.SizeInTexture[0], 0.f};
+        Vector2F ltc{lbc[0], char_.SizeInTexture[1]};
+        Vector2F rtc{rbc[0], ltc[1]};
 
 
         lbp[0] += scaledLocalOffset[0];

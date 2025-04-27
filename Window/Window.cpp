@@ -52,7 +52,7 @@ CWindow::CWindow(Vector2U& size, const char* title, bool fullscreen, int vsyncVa
 
     glfwSetCursorPosCallback((GLFWwindow*)GLFW_WindowPtr, [](GLFWwindow* window, double xpos, double ypos) {
         CWindow* ptr = ((CWindow*)glfwGetWindowUserPointer(window));
-        Vector2I pos((int)xpos, (int)ypos);
+        Vector2I pos{ (int)xpos, (int)ypos };
         ptr->MouseDelta = pos - ptr->GetCursorPosition();
         });
 
@@ -83,12 +83,12 @@ bool CWindow::GetIsWindowWaitingToClose() const {
 Vector2U CWindow::GetWindowSize() const {
     int w, h;
     glfwGetWindowSize((GLFWwindow*)GLFW_WindowPtr, &w, &h);
-    return Vector2U(w, h);
+    return Vector2U{ (unsigned)w, (unsigned)h };
 }
 Vector2I CWindow::GetCursorPosition() const {
     double x, y;
     glfwGetCursorPos((GLFWwindow*)GLFW_WindowPtr, &x, &y);
-    return Vector2I((int)x, (int)y);
+    return Vector2I{ (int)x, (int)y };
 }
 Vector2I CWindow::GetCursorDelta() const {
     return MouseDelta;
@@ -127,6 +127,6 @@ CWindow::~CWindow() {
 
 CWindow::MonitorDataStruct CWindow::GetPrimaryMonitorData() {
     const GLFWvidmode* data = glfwGetVideoMode(glfwGetPrimaryMonitor());
-    return MonitorDataStruct{ Vector2U((unsigned int)data->width,(unsigned int)data->height),
-        Vector3U((unsigned int)data->redBits,(unsigned int)data->greenBits,(unsigned int)data->blueBits),(unsigned int)data->refreshRate };
+    return MonitorDataStruct{ Vector2U{(unsigned)data->width,(unsigned)data->height},
+        Vector3U{(unsigned)data->redBits,(unsigned)data->greenBits,(unsigned)data->blueBits},(unsigned)data->refreshRate };
 }

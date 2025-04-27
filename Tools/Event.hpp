@@ -1,6 +1,7 @@
 #pragma once
 #include"KL2_API.h"
 #include"functional"
+#include<vector>
 #include"ErrorsSystem.hpp"
 
 class CEventConnectionsHandler;

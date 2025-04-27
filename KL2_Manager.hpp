@@ -2,7 +2,6 @@
 #include"KL2_API.h"
 #include"Tools/ErrorsSystem.hpp"
 #include<ostream>
-
 namespace KL2::Manager {
     struct SErrorsEnumWrapper : public ErrorsSystem::SErrorBase {
         enum EErrors {
