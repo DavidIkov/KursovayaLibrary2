@@ -8,7 +8,7 @@ using namespace KL2;
 using namespace Graphics::Primitives;
 
 CShaderProgram::CShaderProgram() {
-    glSC(ID = glCreateProgram());
+    ID = glSC(glCreateProgram);
 }
 CShaderProgram::CShaderProgram(const char* vsPath, const char* fsPath) :CShaderProgram() {
     CShader VS(vsPath, CShader::ETypes::Vertex);
@@ -46,16 +46,16 @@ CShaderProgram& CShaderProgram::operator=(CShaderProgram&& toCopy) {
     return *this;
 }
 void CShaderProgram::AttachShader(unsigned int id) const {
-    glSC(glAttachShader(ID, id));
+    glSC(glAttachShader, ID, id);
 }
 void CShaderProgram::LinkShaders() const {
-    glSC(glLinkProgram(ID));
+    glSC(glLinkProgram, ID);
     {//check for linking
-        int success = 0; glSC(glGetProgramiv(ID, GL_LINK_STATUS, &success));
+        int success = 0; glSC(glGetProgramiv, ID, GL_LINK_STATUS, &success);
         if (success == false) {
-            int infoLen = 0; glSC(glGetProgramiv(ID, GL_INFO_LOG_LENGTH, &infoLen));
+            int infoLen = 0; glSC(glGetProgramiv, ID, GL_INFO_LOG_LENGTH, &infoLen);
             std::string info(infoLen - 1, '\0');
-            glSC(glGetProgramInfoLog(ID, infoLen, 0, (char*)info.c_str()));
+            glSC(glGetProgramInfoLog, ID, infoLen, nullptr, (char*)info.c_str());
             ErrorsSystem::SendError << "Failed to link shaders, OpenGL returned a message: [" << info << "]" >> SErrorsEnumWrapper(ErrorsEnum::FailedToLinkShaders);
         }
     }
@@ -63,21 +63,21 @@ void CShaderProgram::LinkShaders() const {
 CShaderProgram::~CShaderProgram() noexcept(false) {
     if (ID != 0u) {
         Unbind();
-        glSC(glDeleteProgram(ID));
+        glSC(glDeleteProgram, ID);
         ID = 0u;
     }
 }
 
 void CShaderProgram::Bind() const {
-    glSC(glUseProgram(ID));
+    glSC(glUseProgram, ID);
 }
 void CShaderProgram::Unbind() {
-    glSC(glUseProgram(0));
+    glSC(glUseProgram, 0);
 }
 
 unsigned int CShaderProgram::GetUniformIDByName(const char* name) const {
     Bind();
-    glSC(int uniformID = glGetUniformLocation(ID, name));
+    int uniformID = glSC(glGetUniformLocation, ID, name);
     return uniformID;
 }
 CShaderProgram::SUniformData CShaderProgram::GetUniformData(unsigned int index) const {
@@ -86,7 +86,7 @@ CShaderProgram::SUniformData CShaderProgram::GetUniformData(unsigned int index) 
     char name[100] = {};
     int actualNameLength = 0;
     int size = 0;
-    glSC(glGetActiveUniform(ID, index, sizeof(name) / sizeof(char), &actualNameLength, &size, &returnData.Type, name));
+    glSC(glGetActiveUniform, ID, index, sizeof(name) / sizeof(char), &actualNameLength, &size, &returnData.Type, name);
     if (actualNameLength == (sizeof(name) / sizeof(char) - 1))
         ErrorsSystem::SendError << "name of uniform is too long, current limit is: [" << std::to_string(sizeof(name) / sizeof(char)) << "]" >> SErrorsEnumWrapper(ErrorsEnum::UniformNameIsTooLarge);
     returnData.Size = size;
@@ -97,7 +97,7 @@ CShaderProgram::SUniformData CShaderProgram::GetUniformData(unsigned int index) 
 std::vector<CShaderProgram::SUniformData> CShaderProgram::GetUniformsData() const {
     Bind();
     int amountOfUniforms = 0;
-    glSC(glGetProgramiv(ID, GL_ACTIVE_UNIFORMS, &amountOfUniforms));
+    glSC(glGetProgramiv, ID, GL_ACTIVE_UNIFORMS, &amountOfUniforms);
 
     std::vector<SUniformData> arr;
     arr.reserve(amountOfUniforms);
@@ -109,7 +109,7 @@ std::vector<CShaderProgram::SUniformData> CShaderProgram::GetUniformsData() cons
 }
 
 
-#define uniformCOPYPASTE(funcName, ...) Bind(); glSC(funcName(uniformID, __VA_ARGS__));
+#define uniformCOPYPASTE(funcName, ...) Bind(); glSC(funcName, uniformID, __VA_ARGS__);
 
 void CShaderProgram::SetUniform1f(unsigned int uniformID, float v0) const { uniformCOPYPASTE(glUniform1f, v0); }
 void CShaderProgram::SetUniform2f(unsigned int uniformID, float v0, float v1) const { uniformCOPYPASTE(glUniform2f, v0, v1); }

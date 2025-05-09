@@ -42,17 +42,17 @@ unsigned int CFrameBuffer::_AttachmentType_SwitchCase(EAttachmentTypes attachmen
 void CFrameBuffer::ClearColorBuffer() const {
     Assert_Finished_Macro;
     Bind();
-    glSC(glClear(GL_COLOR_BUFFER_BIT));
+    glSC(glClear, GL_COLOR_BUFFER_BIT);
 }
 void CFrameBuffer::ClearDepthBuffer() const {
     Assert_Finished_Macro;
     Bind();
-    glSC(glClear(GL_DEPTH_BUFFER_BIT));
+    glSC(glClear, GL_DEPTH_BUFFER_BIT);
 }
 void CFrameBuffer::ClearStencilBuffer() const {
     Assert_Finished_Macro;
     Bind();
-    glSC(glClear(GL_STENCIL_BUFFER_BIT));
+    glSC(glClear, GL_STENCIL_BUFFER_BIT);
 }
 void CFrameBuffer::ClearAllBuffers() const {
     ClearColorBuffer();
@@ -61,7 +61,7 @@ void CFrameBuffer::ClearAllBuffers() const {
 }
 
 CFrameBuffer::CFrameBuffer() {
-    glSC(glGenFramebuffers(1, &ID));
+    glSC(glGenFramebuffers, 1, &ID);
     Bind();
 }
 CFrameBuffer::CFrameBuffer(CFrameBuffer&& toCopy) noexcept:
@@ -77,7 +77,7 @@ CFrameBuffer& CFrameBuffer::operator=(CFrameBuffer&& toCopy) {
 CFrameBuffer::~CFrameBuffer() noexcept(false) {
     if (ID != 0u) {
         Unbind();
-        glSC(glDeleteFramebuffers(1, &ID));
+        glSC(glDeleteFramebuffers, 1, &ID);
         ID = 0u;
     }
 }
@@ -85,35 +85,35 @@ void CFrameBuffer::AttachRenderBuffer(CRenderBuffer& renderBuffer, CRenderBuffer
     Bind();
     Assert_NotFinished_Macro;
 
-    glSC(glFramebufferRenderbuffer(GL_FRAMEBUFFER, _BufferDataFormat_SwitchCase(bufferDataFormat) + colorAttachmentInd, GL_RENDERBUFFER, renderBuffer.gID()));
+    glSC(glFramebufferRenderbuffer, GL_FRAMEBUFFER, _BufferDataFormat_SwitchCase(bufferDataFormat) + colorAttachmentInd, GL_RENDERBUFFER, renderBuffer.gID());
 }
 void CFrameBuffer::UnattachRenderBuffer(CRenderBuffer::EBufferDataFormat bufferDataFormat, unsigned int colorAttachmentInd) {
     Bind();
     Assert_NotFinished_Macro;
 
-    glSC(glFramebufferRenderbuffer(GL_FRAMEBUFFER, _BufferDataFormat_SwitchCase(bufferDataFormat) + colorAttachmentInd, GL_RENDERBUFFER, 0));
+    glSC(glFramebufferRenderbuffer, GL_FRAMEBUFFER, _BufferDataFormat_SwitchCase(bufferDataFormat) + colorAttachmentInd, GL_RENDERBUFFER, 0);
 }
 void CFrameBuffer::UnattachRenderBuffer(EAttachmentTypes attachmentType, unsigned int colorAttachmentInd) {
     Bind(); Assert_NotFinished_Macro;
 
-    glSC(glFramebufferRenderbuffer(GL_FRAMEBUFFER, _AttachmentType_SwitchCase(attachmentType) + colorAttachmentInd, GL_RENDERBUFFER, 0));
+    glSC(glFramebufferRenderbuffer, GL_FRAMEBUFFER, _AttachmentType_SwitchCase(attachmentType) + colorAttachmentInd, GL_RENDERBUFFER, 0);
 }
 void CFrameBuffer::AttachTexture(CTexture& texture, CTexture::SDataSettings::EDataFormatOnGPU dataFormatOnGPU, unsigned int colorAttachmentInd) {
     Bind();
     Assert_NotFinished_Macro;
 
-    glSC(glFramebufferTexture2D(GL_FRAMEBUFFER, _DataFormatOnGPU_SwitchCase(dataFormatOnGPU) + colorAttachmentInd, GL_TEXTURE_2D, texture.gID(), 0));
+    glSC(glFramebufferTexture2D, GL_FRAMEBUFFER, _DataFormatOnGPU_SwitchCase(dataFormatOnGPU) + colorAttachmentInd, GL_TEXTURE_2D, texture.gID(), 0);
 }
 void CFrameBuffer::UnattachTexture(CTexture::SDataSettings::EDataFormatOnGPU dataFormatOnGPU, unsigned int colorAttachmentInd) {
     Bind();
     Assert_NotFinished_Macro;
 
-    glSC(glFramebufferTexture2D(GL_FRAMEBUFFER, _DataFormatOnGPU_SwitchCase(dataFormatOnGPU) + colorAttachmentInd, GL_TEXTURE_2D, 0, 0));
+    glSC(glFramebufferTexture2D, GL_FRAMEBUFFER, _DataFormatOnGPU_SwitchCase(dataFormatOnGPU) + colorAttachmentInd, GL_TEXTURE_2D, 0, 0);
 }
 void CFrameBuffer::UnattachTexture(EAttachmentTypes attachmentType, unsigned int colorAttachmentInd) {
     Bind(); Assert_NotFinished_Macro;
 
-    glSC(glFramebufferTexture2D(GL_FRAMEBUFFER, _AttachmentType_SwitchCase(attachmentType) + colorAttachmentInd, GL_TEXTURE_2D, 0, 0));
+    glSC(glFramebufferTexture2D, GL_FRAMEBUFFER, _AttachmentType_SwitchCase(attachmentType) + colorAttachmentInd, GL_TEXTURE_2D, 0, 0);
 }
 
 
@@ -128,11 +128,11 @@ void CFrameBuffer::Finish() const {
 }
 void CFrameBuffer::Bind() const {
 
-    glSC(glBindFramebuffer(GL_FRAMEBUFFER, ID));
+    glSC(glBindFramebuffer, GL_FRAMEBUFFER, ID);
 }
 void CFrameBuffer::Unbind() {
-    glSC(glBindFramebuffer(GL_FRAMEBUFFER, 0));
+    glSC(glBindFramebuffer, GL_FRAMEBUFFER, 0);
 }
 void CFrameBuffer::SetViewportSize(Vector2U viewportSize) {
-    glSC(glViewport(0, 0, viewportSize[0], viewportSize[1]));
+    glSC(glViewport, 0, 0, viewportSize[0], viewportSize[1]);
 }

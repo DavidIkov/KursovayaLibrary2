@@ -3,6 +3,8 @@
 #include"Tools/ErrorsSystem.hpp"
 #include<ostream>
 namespace KL2::Manager {
+    extern unsigned OpenGL_VersionMajor, OpenGL_VersionMinor;
+
     struct SErrorsEnumWrapper : public ErrorsSystem::SErrorBase {
         enum EErrors {
             FailedToInitializeGLFW,

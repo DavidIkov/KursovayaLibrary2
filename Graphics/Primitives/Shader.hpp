@@ -1,6 +1,7 @@
 #pragma once
 #include"KL2_API.h"
 #include"Tools/ErrorsSystem.hpp"
+#include<cstdint>
 
 namespace KL2::Graphics::Primitives {
 

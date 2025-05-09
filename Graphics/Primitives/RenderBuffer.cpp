@@ -19,9 +19,9 @@ unsigned int CRenderBuffer::_BufferDataFormat_SwitchCase(EBufferDataFormat buffe
     }
 }
 CRenderBuffer::CRenderBuffer(Vector2U size, EBufferDataFormat bufferDataFormat) {
-    glSC(glGenRenderbuffers(1, &ID));
+    glSC(glGenRenderbuffers, 1, &ID);
     Bind();
-    glSC(glRenderbufferStorage(GL_RENDERBUFFER, _BufferDataFormat_SwitchCase(bufferDataFormat), size[0], size[1]));
+    glSC(glRenderbufferStorage, GL_RENDERBUFFER, _BufferDataFormat_SwitchCase(bufferDataFormat), size[0], size[1]);
 }
 CRenderBuffer::CRenderBuffer(CRenderBuffer&& toCopy) noexcept :
     ID(toCopy.ID) {
@@ -35,13 +35,13 @@ CRenderBuffer& CRenderBuffer::operator=(CRenderBuffer&& toCopy) {
 CRenderBuffer::~CRenderBuffer() noexcept(false) {
     if (ID != 0u) {
         Unbind();
-        glSC(glDeleteRenderbuffers(1, &ID));
+        glSC(glDeleteRenderbuffers, 1, &ID);
         ID = 0u;
     }
 }
 void CRenderBuffer::Bind() const {
-    glSC(glBindRenderbuffer(GL_RENDERBUFFER, ID));
+    glSC(glBindRenderbuffer, GL_RENDERBUFFER, ID);
 }
 void CRenderBuffer::Unbind() {
-    glSC(glBindRenderbuffer(GL_RENDERBUFFER, 0));
+    glSC(glBindRenderbuffer, GL_RENDERBUFFER, 0);
 }

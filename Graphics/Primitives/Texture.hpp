@@ -29,7 +29,7 @@ namespace KL2::Graphics::Primitives {
             Vector<3, EWrapType> WrapType = Vector<3,EWrapType>(EWrapType::Repeat);
             EDownscalingFilterFunc DownscalingFilt = EDownscalingFilterFunc::LinearMipmapLinear;
             EUpscalingFilterFunc UpscalingFilt = EUpscalingFilterFunc::Linear;
-            EDepthStencilReadMode DepthStencilReadMode = EDepthStencilReadMode::Depth;
+            EDepthStencilReadMode DepthStencilReadMode = EDepthStencilReadMode::None;
             Vector<4, ESwizzleMask> SwizzleMask = Vector<4, ESwizzleMask>{ESwizzleMask::Red, ESwizzleMask::Green, ESwizzleMask::Blue, ESwizzleMask::Alpha};
 
         };

@@ -1,8 +1,9 @@
 
 #include"TextRenderer.hpp"
-#ifndef KL2_DONT_USE_FREE_TYPE
 #include"Graphics/Primitives/Renderer.hpp"
 #include"Tools/GLDebug.hpp"
+#include<algorithm>
+#ifndef KL2_DONT_USE_FREE_TYPE
 #include"FreeType/include/ft2build.h"
 #include"FreeType/include/freetype/freetype.h"
 #endif
@@ -178,11 +179,11 @@ GA::CTextRenderer::SFont::SFont(GuardFromUser, unsigned int characterSize, const
         }
     }
 
-    glSC(glPixelStorei(GL_UNPACK_ALIGNMENT, 1)); // disable byte-alignment restriction
+    glSC(glPixelStorei, GL_UNPACK_ALIGNMENT, 1); // disable byte-alignment restriction
 
     Texture = GP::CTexture(GP::CTexture::EDimensions::Two, Vector3U{totalXSize, maxHeight, 0u}, &*textureBuffer.begin(), 0, TextureSettings, TextureDataSettings);
 
-    glSC(glPixelStorei(GL_UNPACK_ALIGNMENT, 4)); // enable byte-alignment back
+    glSC(glPixelStorei, GL_UNPACK_ALIGNMENT, 4); // enable byte-alignment back
 
 }
 

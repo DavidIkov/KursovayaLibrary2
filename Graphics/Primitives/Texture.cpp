@@ -155,13 +155,13 @@ CTexture::CTexture(EDimensions dimensions, const char* filePath, Vector3U* write
     if (writeSizePtr != nullptr) *writeSizePtr = Vector3U(width, height, 0);
     if (writeArrayView != nullptr) *writeArrayView = CArrayView<uint8_t>(textureData, width * height);
 
-    glSC(glGenTextures(1, &ID));
+    glSC(glGenTextures, 1, &ID);
     Bind();
 
     _AllocatePixels(Vector3U(width, height, 0u), mipmapLevels, dataSets.DataFormatOnGPU);
     SetSubData(Vector3U(0u), Vector3U(width, height, 0u), textureData, dataSets.DataFormatOnCPU, dataSets.DataTypeOnCPU);
 
-    glSC(glGenerateMipmap(EGL_Tex));
+    glSC(glGenerateMipmap, EGL_Tex);
 
     SetSettings(sets);
     
@@ -173,13 +173,13 @@ CTexture::CTexture(EDimensions dimensions, Vector3U pixelsAmount, const void* da
 
     if (pixelsAmount == Vector3U(0u)) return;
 
-    glSC(glGenTextures(1, &ID));
+    glSC(glGenTextures, 1, &ID);
     Bind();
 
     _AllocatePixels(pixelsAmount, mipmapLevels, dataSets.DataFormatOnGPU);
     SetSubData(Vector3U(0u), pixelsAmount, data, dataSets.DataFormatOnCPU, dataSets.DataTypeOnCPU);
 
-    glSC(glGenerateMipmap(EGL_Tex));
+    glSC(glGenerateMipmap, EGL_Tex);
 
     SetSettings(sets);
 
@@ -189,12 +189,12 @@ CTexture::CTexture(EDimensions dimensions, Vector3U pixelsAmount, unsigned int m
 
     if (pixelsAmount == Vector3U(0u)) return;
 
-    glSC(glGenTextures(1, &ID));
+    glSC(glGenTextures, 1, &ID);
     Bind();
 
     _AllocatePixels(pixelsAmount, mipmapLevels, dataFormatOnGPU);
 
-    glSC(glGenerateMipmap(EGL_Tex));
+    glSC(glGenerateMipmap, EGL_Tex);
 
     SetSettings(sets);
 }
@@ -210,7 +210,7 @@ CTexture& CTexture::operator=(CTexture&& toCopy){
 CTexture::~CTexture() noexcept(false) {
     if (ID != 0u) {
         Unbind();
-        glSC(glDeleteTextures(1, &ID));
+        glSC(glDeleteTextures, 1, &ID);
         ID = 0u;
     }
 }
@@ -219,16 +219,16 @@ void CTexture::_AllocatePixels(Vector3U pixelsAmount, unsigned int mipmapLevels,
     Bind();
     unsigned int gl_dataFormatOnGPU = _DataFormatOnGPU_SwitchCase(dataFormatOnGPU);
     switch (Dimensions) {
-    case EDimensions::One: glSC(glTexStorage1D(EGL_Tex, mipmapLevels + 1, gl_dataFormatOnGPU, pixelsAmount[0])); return;
-    case EDimensions::Two: glSC(glTexStorage2D(EGL_Tex, mipmapLevels + 1, gl_dataFormatOnGPU, pixelsAmount[0], pixelsAmount[1])); return;
-    case EDimensions::Three: glSC(glTexStorage3D(EGL_Tex, mipmapLevels + 1, gl_dataFormatOnGPU, pixelsAmount[0], pixelsAmount[1], pixelsAmount[2])); return;
+    case EDimensions::One: glSC(glTexStorage1D, EGL_Tex, mipmapLevels + 1, gl_dataFormatOnGPU, pixelsAmount[0]); return;
+    case EDimensions::Two: glSC(glTexStorage2D, EGL_Tex, mipmapLevels + 1, gl_dataFormatOnGPU, pixelsAmount[0], pixelsAmount[1]); return;
+    case EDimensions::Three: glSC(glTexStorage3D, EGL_Tex, mipmapLevels + 1, gl_dataFormatOnGPU, pixelsAmount[0], pixelsAmount[1], pixelsAmount[2]); return;
     }
 }
 
 void CTexture::CopySubData(const CTexture& srcTex, Vector3U offsetInSource, Vector3U offsetInDestination, Vector3U pixelsAmount) {
 
-    glSC(glCopyImageSubData(srcTex.ID, srcTex.EGL_Tex, 0, offsetInSource[0], offsetInSource[1], offsetInSource[2],
-        ID, EGL_Tex, 0, offsetInDestination[0], offsetInDestination[1], offsetInDestination[2], pixelsAmount[0], pixelsAmount[1], pixelsAmount[2]));
+    glSC(glCopyImageSubData, srcTex.ID, srcTex.EGL_Tex, 0, offsetInSource[0], offsetInSource[1], offsetInSource[2],
+        ID, EGL_Tex, 0, offsetInDestination[0], offsetInDestination[1], offsetInDestination[2], pixelsAmount[0], pixelsAmount[1], pixelsAmount[2]);
     //TODO make it work with 3.3
     //opengl 3.3 variant
     /*
@@ -247,9 +247,9 @@ void CTexture::SetSubData(Vector3U pixelsOffset, Vector3U pixelsAmount, const vo
     unsigned int gl_dataFormatOnCPU = _DataFormatOnCPU_SwitchCase(dataFormat);
     unsigned int gl_dataTypeOnCPU = _DataTypeOnCPU_SwitchCase(dataType);
     switch (Dimensions) {
-    case EDimensions::One: glSC(glTexSubImage1D(EGL_Tex, 0, pixelsOffset[0], pixelsAmount[0], gl_dataFormatOnCPU, gl_dataTypeOnCPU, data)); return;
-    case EDimensions::Two: glSC(glTexSubImage2D(EGL_Tex, 0, pixelsOffset[0], pixelsOffset[1], pixelsAmount[0], pixelsAmount[1], gl_dataFormatOnCPU, gl_dataTypeOnCPU, data)); return;
-    case EDimensions::Three: glSC(glTexSubImage3D(EGL_Tex, 0, pixelsOffset[0], pixelsOffset[1], pixelsOffset[2], pixelsAmount[0], pixelsAmount[1], pixelsAmount[2], gl_dataFormatOnCPU, gl_dataTypeOnCPU, data)); return;
+    case EDimensions::One: glSC(glTexSubImage1D, EGL_Tex, 0, pixelsOffset[0], pixelsAmount[0], gl_dataFormatOnCPU, gl_dataTypeOnCPU, data); return;
+    case EDimensions::Two: glSC(glTexSubImage2D, EGL_Tex, 0, pixelsOffset[0], pixelsOffset[1], pixelsAmount[0], pixelsAmount[1], gl_dataFormatOnCPU, gl_dataTypeOnCPU, data); return;
+    case EDimensions::Three: glSC(glTexSubImage3D, EGL_Tex, 0, pixelsOffset[0], pixelsOffset[1], pixelsOffset[2], pixelsAmount[0], pixelsAmount[1], pixelsAmount[2], gl_dataFormatOnCPU, gl_dataTypeOnCPU, data); return;
     }
 }
 
@@ -257,67 +257,67 @@ void CTexture::SetSubData(Vector3U pixelsOffset, Vector3U pixelsAmount, const vo
 void CTexture::GetData(void* buffer, SDataSettings::EDataFormatOnCPU dataFormat, SDataSettings::EDataTypeOnCPU dataType) const {
     Bind();
 
-    glSC(glGetTexImage(EGL_Tex, 0, _DataFormatOnCPU_SwitchCase(dataFormat), _DataTypeOnCPU_SwitchCase(dataType), buffer));
+    glSC(glGetTexImage, EGL_Tex, 0, _DataFormatOnCPU_SwitchCase(dataFormat), _DataTypeOnCPU_SwitchCase(dataType), buffer);
 }
 void CTexture::GetSubData(Vector3U offset, void* buffer, Vector3U pixelsAmount, SDataSettings::EDataFormatOnCPU dataFormat, 
     SDataSettings::EDataTypeOnCPU dataType) const {
     
     //TODO make this work with 3.3, now in order for this to work i have to use opengl 4.5
-    glSC(glGetTextureSubImage(ID, 0, offset[0], offset[1], offset[2], pixelsAmount[0], pixelsAmount[1], pixelsAmount[2],
+    glSC(glGetTextureSubImage, ID, 0, offset[0], offset[1], offset[2], pixelsAmount[0], pixelsAmount[1], pixelsAmount[2],
         _DataFormatOnCPU_SwitchCase(dataFormat), _DataTypeOnCPU_SwitchCase(dataType),
-        _DataTypeOnCPU_Sizeof_SwitchCase(dataType) * pixelsAmount[0] * pixelsAmount[1] * pixelsAmount[2], buffer));
+        _DataTypeOnCPU_Sizeof_SwitchCase(dataType) * pixelsAmount[0] * pixelsAmount[1] * pixelsAmount[2], buffer);
 }
 
 void CTexture::SetSettings_WrapTypeByX(SSettings::EWrapType wrapType) {
     Bind();
-    glSC(glTexParameteri(EGL_Tex, GL_TEXTURE_WRAP_S, _WrapType_SwitchCase(wrapType)));
+    glSC(glTexParameteri, EGL_Tex, GL_TEXTURE_WRAP_S, _WrapType_SwitchCase(wrapType));
 }
 void CTexture::SetSettings_WrapTypeByY(SSettings::EWrapType wrapType) {
     Bind();
-    glSC(glTexParameteri(EGL_Tex, GL_TEXTURE_WRAP_T, _WrapType_SwitchCase(wrapType)));
+    glSC(glTexParameteri, EGL_Tex, GL_TEXTURE_WRAP_T, _WrapType_SwitchCase(wrapType));
 }
 void CTexture::SetSettings_WrapTypeByZ(SSettings::EWrapType wrapType) {
     Bind();
-    glSC(glTexParameteri(EGL_Tex, GL_TEXTURE_WRAP_R, _WrapType_SwitchCase(wrapType)));
+    glSC(glTexParameteri, EGL_Tex, GL_TEXTURE_WRAP_R, _WrapType_SwitchCase(wrapType));
 }
 void CTexture::SetSettings_DownscalingFilt(SSettings::EDownscalingFilterFunc downscalingFilt) {
     Bind();
-    glSC(glTexParameteri(EGL_Tex, GL_TEXTURE_MIN_FILTER, _DownscalingFilterFunc_SwitchCase(downscalingFilt)));
+    glSC(glTexParameteri, EGL_Tex, GL_TEXTURE_MIN_FILTER, _DownscalingFilterFunc_SwitchCase(downscalingFilt));
 }
 void CTexture::SetSettings_UpscalingFilt(SSettings::EUpscalingFilterFunc upscalingFilt) {
     Bind(); 
-    glSC(glTexParameteri(EGL_Tex, GL_TEXTURE_MAG_FILTER, _UpscalingFilterFunc_SwitchCase(upscalingFilt)));
+    glSC(glTexParameteri, EGL_Tex, GL_TEXTURE_MAG_FILTER, _UpscalingFilterFunc_SwitchCase(upscalingFilt));
 }
 void CTexture::SetSettings_DepthStencilReadMode(SSettings::EDepthStencilReadMode depthStencilReadMode) {
     Bind();
-    glSC(glTexParameteri(EGL_Tex, GL_DEPTH_STENCIL_TEXTURE_MODE, _DepthStencilReadMode_SwitchCase(depthStencilReadMode)));
+    glSC(glTexParameteri, EGL_Tex, GL_DEPTH_STENCIL_TEXTURE_MODE, _DepthStencilReadMode_SwitchCase(depthStencilReadMode));
 }
 void CTexture::SetSettings_SwizzleMaskByR(SSettings::ESwizzleMask swizzleMask) {
     Bind();
-    glSC(glTexParameteri(EGL_Tex, GL_TEXTURE_SWIZZLE_R, _SwizzleMask_SwitchCase(swizzleMask)));
+    glSC(glTexParameteri, EGL_Tex, GL_TEXTURE_SWIZZLE_R, _SwizzleMask_SwitchCase(swizzleMask));
 }
 void CTexture::SetSettings_SwizzleMaskByG(SSettings::ESwizzleMask swizzleMask) {
     Bind();
-    glSC(glTexParameteri(EGL_Tex, GL_TEXTURE_SWIZZLE_G, _SwizzleMask_SwitchCase(swizzleMask)));
+    glSC(glTexParameteri, EGL_Tex, GL_TEXTURE_SWIZZLE_G, _SwizzleMask_SwitchCase(swizzleMask));
 }
 void CTexture::SetSettings_SwizzleMaskByB(SSettings::ESwizzleMask swizzleMask) {
     Bind();
-    glSC(glTexParameteri(EGL_Tex, GL_TEXTURE_SWIZZLE_B, _SwizzleMask_SwitchCase(swizzleMask)));
+    glSC(glTexParameteri, EGL_Tex, GL_TEXTURE_SWIZZLE_B, _SwizzleMask_SwitchCase(swizzleMask));
 }
 void CTexture::SetSettings_SwizzleMaskByA(SSettings::ESwizzleMask swizzleMask) {
     Bind();
-    glSC(glTexParameteri(EGL_Tex, GL_TEXTURE_SWIZZLE_A, _SwizzleMask_SwitchCase(swizzleMask)));
+    glSC(glTexParameteri, EGL_Tex, GL_TEXTURE_SWIZZLE_A, _SwizzleMask_SwitchCase(swizzleMask));
 }
 
 void CTexture::Bind(unsigned int textureInd) const {
-    glSC(glActiveTexture(GL_TEXTURE0 + textureInd));
-    glSC(glBindTexture(EGL_Tex, ID));
+    glSC(glActiveTexture, GL_TEXTURE0 + textureInd);
+    glSC(glBindTexture, EGL_Tex, ID);
 }
 void CTexture::Bind() const {
-    glSC(glBindTexture(EGL_Tex, ID));
+    glSC(glBindTexture, EGL_Tex, ID);
 }
 
 void CTexture::Unbind() const {
-    glSC(glBindTexture(EGL_Tex, 0));
+    glSC(glBindTexture, EGL_Tex, 0);
 }
 

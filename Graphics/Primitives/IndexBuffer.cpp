@@ -6,7 +6,7 @@ using namespace KL2;
 using namespace Graphics::Primitives;
 
 CIndexBuffer::CIndexBuffer() {
-    glSC(glGenBuffers(1, &ID));
+    glSC(glGenBuffers, 1, &ID);
     Bind();
 }
 CIndexBuffer::CIndexBuffer(CIndexBuffer&& toCopy) noexcept :
@@ -21,7 +21,7 @@ CIndexBuffer& CIndexBuffer::operator=(CIndexBuffer&& toCopy) {
 CIndexBuffer::~CIndexBuffer() noexcept(false) {
     if (ID != 0u) {
         Unbind();
-        glSC(glDeleteBuffers(1, &ID));
+        glSC(glDeleteBuffers, 1, &ID);
         ID = 0u;
     }
 };
@@ -42,32 +42,32 @@ static unsigned int _GetIBUsageForGL(CIndexBuffer::EBufferReadWriteMode usage) {
 }
 void CIndexBuffer::SetData(const CArrayView<uint8_t>& data, const EBufferReadWriteMode bufferReadWriteMode) {
     Bind();
-    glSC(glBufferData(GL_ELEMENT_ARRAY_BUFFER, data.GetLen(), data.GetData(), _GetIBUsageForGL(bufferReadWriteMode)));
+    glSC(glBufferData, GL_ELEMENT_ARRAY_BUFFER, data.GetLen(), data.GetData(), _GetIBUsageForGL(bufferReadWriteMode));
 }
 void CIndexBuffer::SetSubData(size_t offsetInBytes, const CArrayView<uint8_t>& data) {
     Bind();
-    glSC(glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offsetInBytes, data.GetLen(), data.GetData()));
+    glSC(glBufferSubData, GL_ELEMENT_ARRAY_BUFFER, offsetInBytes, data.GetLen(), data.GetData());
 }
 
 void CIndexBuffer::CopySubData(const CIndexBuffer& srcBuffer, size_t srcOffsetInBytes, size_t dstOffsetInBytes, size_t amountOfBytesToCopy) {
-    glSC(glBindBuffer(GL_COPY_READ_BUFFER, srcBuffer.ID));
-    glSC(glBindBuffer(GL_COPY_WRITE_BUFFER, ID));
+    glSC(glBindBuffer, GL_COPY_READ_BUFFER, srcBuffer.ID);
+    glSC(glBindBuffer, GL_COPY_WRITE_BUFFER, ID);
 
-    glSC(glCopyBufferSubData(GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, srcOffsetInBytes, dstOffsetInBytes, amountOfBytesToCopy));
+    glSC(glCopyBufferSubData, GL_COPY_READ_BUFFER, GL_COPY_WRITE_BUFFER, srcOffsetInBytes, dstOffsetInBytes, amountOfBytesToCopy);
 
-    glSC(glBindBuffer(GL_COPY_READ_BUFFER, 0));
-    glSC(glBindBuffer(GL_COPY_WRITE_BUFFER, 0));
+    glSC(glBindBuffer, GL_COPY_READ_BUFFER, 0);
+    glSC(glBindBuffer, GL_COPY_WRITE_BUFFER, 0);
 }
 
 void CIndexBuffer::GetSubData(size_t offsetInBytes, size_t amountOfBytesToCopy, void* data) const {
     Bind();
 
-    glSC(glGetBufferSubData(GL_ELEMENT_ARRAY_BUFFER, offsetInBytes, amountOfBytesToCopy, data));
+    glSC(glGetBufferSubData, GL_ELEMENT_ARRAY_BUFFER, offsetInBytes, amountOfBytesToCopy, data);
 }
 
 void CIndexBuffer::Bind() const {
-    glSC(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ID));
+    glSC(glBindBuffer, GL_ELEMENT_ARRAY_BUFFER, ID);
 }
 void CIndexBuffer::Unbind() {
-    glSC(glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0));
+    glSC(glBindBuffer, GL_ELEMENT_ARRAY_BUFFER, 0);
 }

@@ -3,9 +3,15 @@
 #include"GLFW/glfw3.h"
 #include<iostream>
 
+unsigned KL2::Manager::OpenGL_VersionMajor = 0;
+unsigned KL2::Manager::OpenGL_VersionMinor = 0;
+
 size_t KL2::Manager::CKL2::_GetVoidPtrSizeInKL2() noexcept { return sizeof(void*); }
 
 void KL2::Manager::CKL2::_InitializeKL2(unsigned openglVersionMajor, unsigned openglVersionMinor) {
+
+    OpenGL_VersionMajor = openglVersionMajor;
+    OpenGL_VersionMinor = openglVersionMinor;
 
     if (!glfwInit()) {
         ErrorsSystem::SendError << "Failed to initialize GLFW" >> SErrorsEnumWrapper(ErrorsEnum::FailedToInitializeGLFW);

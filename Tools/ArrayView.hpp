@@ -1,6 +1,7 @@
 #pragma once
 #include<vector>
 #include<array>
+#include<cstdint>
 
 //you can just use span at this point, if you are at c++20+.
 //this class have a weak const features, like its 

@@ -9,22 +9,22 @@ using namespace KL2::Window;
 bool CWindow::FirstWindow = true;
 
 void CWindow::ClearColorBuffer() {
-    glSC(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-    glSC(glClear(GL_COLOR_BUFFER_BIT));
+    glSC(glBindFramebuffer, GL_FRAMEBUFFER, 0);
+    glSC(glClear, GL_COLOR_BUFFER_BIT);
 }
 void CWindow::ClearDepthBuffer() {
-    glSC(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-    glSC(glClear(GL_DEPTH_BUFFER_BIT));
+    glSC(glBindFramebuffer, GL_FRAMEBUFFER, 0);
+    glSC(glClear, GL_DEPTH_BUFFER_BIT);
 }
 void CWindow::ClearStencilBuffer() {
-    glSC(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-    glSC(glClear(GL_STENCIL_BUFFER_BIT));
+    glSC(glBindFramebuffer, GL_FRAMEBUFFER, 0);
+    glSC(glClear, GL_STENCIL_BUFFER_BIT);
 }
 void CWindow::ClearAllBuffers() {
-    glSC(glBindFramebuffer(GL_FRAMEBUFFER, 0));
-    glSC(glClear(GL_COLOR_BUFFER_BIT));
-    glSC(glClear(GL_DEPTH_BUFFER_BIT));
-    glSC(glClear(GL_STENCIL_BUFFER_BIT));
+    glSC(glBindFramebuffer, GL_FRAMEBUFFER, 0);
+    glSC(glClear, GL_COLOR_BUFFER_BIT);
+    glSC(glClear, GL_DEPTH_BUFFER_BIT);
+    glSC(glClear, GL_STENCIL_BUFFER_BIT);
 }
 
 const CKeyboard& CWindow::GetKeyboardHandle() const {

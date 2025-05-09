@@ -32,14 +32,14 @@ static unsigned int constexpr _GetIndexBufferDataType_SwitchCase(Renderer::EInde
     }
 }
 void Renderer::DrawArrays(EPrimitives primitive, unsigned int startingInd, unsigned int amountOfVertexesToRender) {
-    glSC(glDrawArrays(_GetPrimitive_SwitchCase(primitive), startingInd, amountOfVertexesToRender));
+    glSC(glDrawArrays, _GetPrimitive_SwitchCase(primitive), startingInd, amountOfVertexesToRender);
 }
 void Renderer::DrawArraysInstanced(EPrimitives primitive, unsigned int firstVertexInd, unsigned int amountOfVertexesToRender, unsigned int instancesAmount) {
-    glSC(glDrawArraysInstanced(_GetPrimitive_SwitchCase(primitive), firstVertexInd, amountOfVertexesToRender, instancesAmount));
+    glSC(glDrawArraysInstanced, _GetPrimitive_SwitchCase(primitive), firstVertexInd, amountOfVertexesToRender, instancesAmount);
 }
 void Renderer::DrawElements(EPrimitives primitive, unsigned int firstIndexInd, unsigned int amountOfIndexesToRender, EIndexBufferDataType indexBufferDataType) {
-    glSC(glDrawElements(_GetPrimitive_SwitchCase(primitive), amountOfIndexesToRender, _GetIndexBufferDataType_SwitchCase(indexBufferDataType), (const void*)(long long)firstIndexInd));
+    glSC(glDrawElements, _GetPrimitive_SwitchCase(primitive), amountOfIndexesToRender, _GetIndexBufferDataType_SwitchCase(indexBufferDataType), (const void*)(long long)firstIndexInd);
 }
 void Renderer::DrawElementsInstanced(EPrimitives primitive, unsigned int firstIndexInd, unsigned int amountOfIndexesToRender, EIndexBufferDataType indexBufferDataType, unsigned int instancesAmount) {
-    glSC(glDrawElementsInstanced(_GetPrimitive_SwitchCase(primitive), amountOfIndexesToRender, _GetIndexBufferDataType_SwitchCase(indexBufferDataType), (const void*)(long long)firstIndexInd, instancesAmount));
+    glSC(glDrawElementsInstanced, _GetPrimitive_SwitchCase(primitive), amountOfIndexesToRender, _GetIndexBufferDataType_SwitchCase(indexBufferDataType), (const void*)(long long)firstIndexInd, instancesAmount);
 }

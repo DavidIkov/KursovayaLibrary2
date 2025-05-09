@@ -32,7 +32,7 @@ namespace KL2::ErrorsSystem {
         friend class _CSendError;
         std::string Msg;
     public:
-        virtual char const* what() const override { return Msg.empty() ? "Empty message" : Msg.c_str(); }
+        virtual char const* what() const noexcept override { return Msg.empty() ? "Empty message" : Msg.c_str(); }
     };
     typedef SErrorBase AnyError;
     class _CSendError :public _CMessageCreatingHelper {
