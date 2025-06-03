@@ -1,10 +1,8 @@
 #include"Mouse.hpp"
 #include"glfw/include/GLFW/glfw3.h"
-#include<iostream>
 
 
-
-const CEvent& CMouse::gMousePressableKeyEvent(PressableKeysEnum key) const {
+const CEvent& CMouse::gMousePressableKeyEvent(EPressableKeys key) const {
     return PressableKeysEvents[(unsigned int)key];
 }
 
@@ -18,6 +16,6 @@ void CMouse::_GLFW_KEYCALLBACK(int button, int action, int mods) {
 }
 
 
-bool CMouse::gMousePressableKeyState(PressableKeysEnum key) const {
+bool CMouse::gMousePressableKeyState(EPressableKeys key) const {
     return PressableKeysStates[(unsigned int)key];
 }

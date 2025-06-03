@@ -21,10 +21,11 @@ public:
         for (size_t i = 0; i < AxesAmount; i++)
             Axes[i] = numsArrPtr[i];
     }
-    constexpr Vector(std::initializer_list<T> const& nums) noexcept {
-        for (size_t i = 0;i < std::min(AxesAmount, nums.size());i++)
-            Axes[i] = nums.begin()[i];
-    }
+    constexpr Vector(std::initializer_list<T> const& nums) noexcept : Vector(nums, std::make_integer_sequence<size_t, AxesAmount>{}) {}
+private:
+    template<size_t...Inds>
+    constexpr Vector(std::initializer_list<T> const& nums, std::integer_sequence<size_t, Inds...>) noexcept:Axes{nums.begin()[Inds]...}{}
+public:
     constexpr Vector() noexcept {}
 
     ~Vector() = default;
@@ -75,7 +76,7 @@ public:
     }
 
     //first value is dist from p1, and second one is from p2
-    static Vector<2, T> GetDistsToStortestDistBetweenVecs(
+    static Vector<2, T> GetDistsToShortestDistBetweenVecs(
         const Vector<AxesAmount, T>& p1, const Vector<AxesAmount, T>& v1,
         const Vector<AxesAmount, T>& p2, const Vector<AxesAmount, T>& v2) noexcept
     {

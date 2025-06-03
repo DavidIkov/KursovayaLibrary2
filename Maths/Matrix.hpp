@@ -1,5 +1,6 @@
 #pragma once
 #include"Vector.hpp"
+#include<cstring>
 
 /*
 3d rotation standart: X:F,T; Y:R,F; Z:R,T
@@ -17,13 +18,20 @@ public:
     template<size_t, size_t, typename>
     friend class Matrix;
 
-    constexpr Matrix(std::initializer_list<T> const& nums) noexcept {
-        static_assert(nums.size() == SizeX * SizeY, "amount of numbers does not match");
-        for (size_t i = 0;i < std::min(SizeX * SizeY, nums.size());i++)Nums[i] = nums.begin()[i];
-    }
-    constexpr Matrix(std::initializer_list<Vector<SizeY, T> const& vecs) noexcept {
-        for (size_t i = 0;i < std::min(SizeX, vecs.size()) * SizeY;i++)Nums[i] = nums.begin()[i / SizeY][i % SizeY];
-    }
+    constexpr Matrix(std::initializer_list<Vector<SizeY, T>> const& vecs) noexcept : Matrix(vecs, std::make_integer_sequence<size_t, SizeX>{}) {}
+private:
+    constexpr T _MatrixConstrFromVectorsHelper(std::initializer_list<Vector<SizeY, T>> const& vecs, size_t ind) noexcept{ return vecs[ind/SizeY][ind%SizeY]; }
+    template<size_t...Inds>
+    constexpr Matrix(std::initializer_list<Vector<SizeY, T>> const& vecs, std::integer_sequence<size_t, Inds...>) noexcept:Nums{_MatrixConstrFromVectorsHelper(vecs, Inds)...}{}
+public:
+
+    constexpr Matrix(std::initializer_list<T> const& nums) noexcept : Matrix(nums, std::make_integer_sequence<size_t, SizeX * SizeY>{}) {}
+private:
+    template<size_t...Inds>
+    constexpr Matrix(std::initializer_list<T> const& nums, std::integer_sequence<size_t, Inds...>) noexcept:Nums{nums.begin()[Inds]...}{}
+public:
+
+
     constexpr Matrix(const T& num) noexcept {
         for (size_t i = 0; i < SizeX * SizeY; i++) Nums[i] = num;
     }

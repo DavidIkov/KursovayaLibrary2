@@ -50,12 +50,6 @@ CWindow::CWindow(Vector2U& size, const char* title, bool fullscreen, int vsyncVa
 
     glfwSwapInterval(vsyncValue);
 
-    glfwSetCursorPosCallback((GLFWwindow*)GLFW_WindowPtr, [](GLFWwindow* window, double xpos, double ypos) {
-        CWindow* ptr = ((CWindow*)glfwGetWindowUserPointer(window));
-        Vector2I pos{ (int)xpos, (int)ypos };
-        ptr->MouseDelta = pos - ptr->GetCursorPosition();
-        });
-
     glfwSetMouseButtonCallback((GLFWwindow*)GLFW_WindowPtr, [](GLFWwindow* window, int button, int action, int mods) {
         ((CWindow*)glfwGetWindowUserPointer(window))->MouseHandle._GLFW_KEYCALLBACK(button, action, mods);
         });
@@ -89,9 +83,6 @@ Vector2I CWindow::GetCursorPosition() const {
     double x, y;
     glfwGetCursorPos((GLFWwindow*)GLFW_WindowPtr, &x, &y);
     return Vector2I{ (int)x, (int)y };
-}
-Vector2I CWindow::GetCursorDelta() const {
-    return MouseDelta;
 }
 void CWindow::SwapScreenBuffers() {
     glfwSwapBuffers((GLFWwindow*)GLFW_WindowPtr);

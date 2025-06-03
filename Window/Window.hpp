@@ -1,5 +1,6 @@
 #pragma once
 #include"KL2_API.h"
+#include<cstdint>
 #include"Input/Keyboard.hpp"
 #include"Input/Mouse.hpp"
 #include"Maths/Vector.hpp"
@@ -22,15 +23,13 @@ namespace KL2::Window {
 
     public:
         enum class ECursorModes :uint8_t {
-            Free, Hidden, Disabled,
-            LockedAndInvisible,
+            Free, Hidden, Disabled, Captured,
         };
     private:
 
         void* GLFW_WindowPtr;//GLFWwindow*
         bool Deleted = false;
 
-        Vector2I MouseDelta;
         static bool FirstWindow;//true
 
         CKeyboard KeyboardHandle;
@@ -69,7 +68,6 @@ namespace KL2::Window {
         KL2_API void WaitTillEvent();
         KL2_API Vector2U GetWindowSize() const;
         KL2_API Vector2I GetCursorPosition() const;
-        KL2_API Vector2I GetCursorDelta() const;
         KL2_API void SetCursorMode(ECursorModes mode);
         KL2_API ECursorModes GetCursorMode() const;
 

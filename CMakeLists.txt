@@ -40,6 +40,8 @@ add_library(KL2 STATIC
 )
 set(CMAKE_CXX_STANDARD 17 CACHE STRING "C++ standart")
 
+target_link_libraries(KL2 PUBLIC stdc++)
+
 target_include_directories(KL2 PRIVATE ${PROJECT_SOURCE_DIR})
 
 set(KL2_GLFW_DIR ${PROJECT_SOURCE_DIR}/libs/glfw)
