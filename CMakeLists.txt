@@ -14,28 +14,28 @@ add_library(KL2 STATIC
     Input/Keyboard.hpp
     Input/Mouse.cpp
     Input/Mouse.hpp
-    Graphics/Primitives/VertexBuffer.cpp
-    Graphics/Primitives/VertexBuffer.hpp
-    Graphics/Primitives/VertexArray.cpp
-    Graphics/Primitives/VertexArray.hpp
-    Graphics/Primitives/Texture.cpp
-    Graphics/Primitives/Texture.hpp
-    Graphics/Primitives/FrameBuffer.cpp
-    Graphics/Primitives/FrameBuffer.hpp
-    Graphics/Primitives/RenderBuffer.cpp
-    Graphics/Primitives/RenderBuffer.hpp
-    Graphics/Primitives/Shader.cpp
-    Graphics/Primitives/Shader.hpp
-    Graphics/Primitives/ShaderProgram.cpp
-    Graphics/Primitives/ShaderProgram.hpp
-    Graphics/Primitives/IndexBuffer.cpp
-    Graphics/Primitives/IndexBuffer.hpp
-    Graphics/Primitives/Renderer.cpp
-    Graphics/Primitives/Renderer.hpp
-    Graphics/Primitives/RenderingPreset.cpp
-    Graphics/Primitives/RenderingPreset.hpp
-    Graphics/Abstractions/TextRenderer.cpp
-    Graphics/Abstractions/TextRenderer.hpp
+    Graphics/VertexBuffer.cpp
+    Graphics/VertexBuffer.hpp
+    Graphics/VertexArray.cpp
+    Graphics/VertexArray.hpp
+    Graphics/Texture.cpp
+    Graphics/Texture.hpp
+    Graphics/FrameBuffer.cpp
+    Graphics/FrameBuffer.hpp
+    Graphics/RenderBuffer.cpp
+    Graphics/RenderBuffer.hpp
+    Graphics/Shader.cpp
+    Graphics/Shader.hpp
+    Graphics/ShaderProgram.cpp
+    Graphics/ShaderProgram.hpp
+    Graphics/IndexBuffer.cpp
+    Graphics/IndexBuffer.hpp
+    Graphics/Renderer.cpp
+    Graphics/Renderer.hpp
+    Graphics/RenderingPreset.cpp
+    Graphics/RenderingPreset.hpp
+    Graphics/TextRenderer.cpp
+    Graphics/TextRenderer.hpp
 
 )
 set(CMAKE_CXX_STANDARD 17 CACHE STRING "C++ standart")
