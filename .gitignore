@@ -2,3 +2,4 @@
 [Bb]uild/
 .vscode/
 compile_commands.json
+.cache/

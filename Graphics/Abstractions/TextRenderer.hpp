@@ -67,8 +67,8 @@ namespace KL2::Graphics::Abstractions {
 
         //pixelsInTexture is amount of pixels in the texture you are rendering this text to
         //TODO add functionality for "dividingSymbols" and make so text will be separated in a few lines if possible
-        KL2_API void RenderText(const SFont& font, const wchar_t* text, Vector2F pos, Vector2F localOffset, Vector2U pixelsInTexture,
-            Vector2F boxSize, float lineSizeInBox, const wchar_t* dividingSymbols = nullptr);
+        KL2_API void RenderText(const SFont& font, const char32_t* text, Vector2F pos, Vector2F localOffset, Vector2U pixelsInTexture,
+            Vector2F boxSize, float lineSizeInBox, const char32_t* dividingSymbols = nullptr);
 
 
     };

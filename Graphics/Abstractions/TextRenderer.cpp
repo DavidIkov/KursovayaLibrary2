@@ -102,7 +102,7 @@ GA::CTextRenderer::SFont::SFont(GuardFromUser, unsigned int characterSize, const
     FT_Set_Pixel_Sizes(*(FT_Face*)FreeTypeFace, 0, characterSize);
 
 
-    unsigned int charsAmount = 0; while (chars[charsAmount] != L'\0') charsAmount++;
+    unsigned int charsAmount = 0; while (chars[charsAmount] != U'\0') charsAmount++;
 
     Characters.reserve(charsAmount);
     std::vector<std::vector<unsigned char>> buffers; buffers.reserve(charsAmount);
@@ -189,8 +189,8 @@ GA::CTextRenderer::SFont::SFont(GuardFromUser, unsigned int characterSize, const
 
 static constexpr unsigned int MAX_TEXT_LEN = 100000;
 
-void GA::CTextRenderer::RenderText(const SFont& font, const wchar_t* text, Vector2F pos, Vector2F localOffset, Vector2U pixelsInTexture,
-    Vector2F boxSize, float lineSizeInBox, const wchar_t* dividingSymbols) {
+void GA::CTextRenderer::RenderText(const SFont& font, const char32_t* text, Vector2F pos, Vector2F localOffset, Vector2U pixelsInTexture,
+    Vector2F boxSize, float lineSizeInBox, const char32_t* dividingSymbols) {
     
     if (boxSize[0] == 0 && boxSize[1] == 0) return;//theres nothing we can do
 
@@ -202,7 +202,7 @@ void GA::CTextRenderer::RenderText(const SFont& font, const wchar_t* text, Vecto
     font.Texture.Bind(0);
 
     unsigned int textLen = 0;
-    while (textLen != MAX_TEXT_LEN && text[textLen] != L'\0') textLen++;
+    while (textLen != MAX_TEXT_LEN && text[textLen] != U'\0') textLen++;
     if (textLen == MAX_TEXT_LEN) ErrorsSystem::SendError << "Provided text is too big or end symbol was not found, current limit on symbols is: [" <<
         std::to_string(MAX_TEXT_LEN) << "]" >> SErrorsEnumWrapper(ErrorsEnum::TextTooBigOrNoEndFound);
 
