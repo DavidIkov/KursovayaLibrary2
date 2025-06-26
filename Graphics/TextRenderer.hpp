@@ -1,11 +1,11 @@
 #pragma once
 #include"KL2_API.h"
 #include"Maths/Vector.hpp"
-#include"Graphics/Primitives/ShaderProgram.hpp"
-#include"Graphics/Primitives/RenderingPreset.hpp"
-#include"Graphics/Primitives/VertexArray.hpp"
-#include"Graphics/Primitives/VertexBuffer.hpp"
-#include"Graphics/Primitives/Texture.hpp"
+#include"Graphics/ShaderProgram.hpp"
+#include"Graphics/RenderingPreset.hpp"
+#include"Graphics/VertexArray.hpp"
+#include"Graphics/VertexBuffer.hpp"
+#include"Graphics/Texture.hpp"
 #include<list>
 
 namespace KL2::Graphics::Abstractions {

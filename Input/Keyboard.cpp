@@ -5,7 +5,7 @@ bool CKeyboard::gPressableKeyState(EPressableKeys key) const {
     return PressableKeysStates[(unsigned int)key];
 }
 
-const CEvent& CKeyboard::gPressableKeyEvent(EPressableKeys key) const {
+CEvent<bool>& CKeyboard::gPressableKeyEvent(EPressableKeys key) {
     return PressableKeysEvents[(unsigned int)key];
 }
 
@@ -22,7 +22,7 @@ void CKeyboard::_GLFW_KEYCALLBACK(int key, int scancode, int action, int mods)
 
     bool pressedDown = action == GLFW_PRESS;
     PressableKeysStates.set(ind, pressedDown);
-    PressableKeysEvents[ind].FireEvent(&pressedDown);
+    PressableKeysEvents[ind].FireEvent(pressedDown);
 
 }
 

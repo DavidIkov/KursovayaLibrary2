@@ -1,81 +1,107 @@
 #pragma once
-#include"KL2_API.h"
-#include"functional"
-#include<vector>
-#include"ErrorsSystem.hpp"
+#include <functional>
+#include <vector>
 
-class CEventConnectionsHandler;
+template <typename... Ts>
+class CEvent {
+  private:
+    class CSubscription {
+        friend CEvent;
 
-class CEvent{
-    friend class CEventConnectionsHandler;
+      private:
+        std::reference_wrapper<CEvent> Event;
+        size_t UID = 0;
 
-    mutable bool NeedBufferSwap = false;
-
-    bool EventIsFiring = false;
-
-    struct CConnectionDataInFrontBuffer{
-        std::function<void(void*)> Func;
-        std::function<bool(void*)> CheckFunc;
-        bool CheckFuncPassed;
-
-        bool Deleted = false;
-
-        CConnectionDataInFrontBuffer(std::function<void(void*)>& func, std::function<bool(void*)>& checkFunc);
+      public:
+        CSubscription(CEvent& event, size_t UID);
+        CSubscription(CSubscription const&) = delete;
+        CSubscription(CSubscription&&) = default;
+        CSubscription& operator=(CSubscription const&) = delete;
+        CSubscription& operator=(CSubscription&&) = default;
+        ~CSubscription();
     };
-    mutable std::vector<CConnectionDataInFrontBuffer> ConnectionsFrontBuffer;
-    struct CConnectionDataInBackBuffer{
-        std::function<void(void*)> Func;
-        std::function<bool(void*)> CheckFunc;
-
-        float Priority;
-
-        CEventConnectionsHandler* EventConnectionsHandler;
-        unsigned int ConnectionInd;
-
-        unsigned int IndInFrontBuffer = 0;//+1 so if its = 0 then its invalid
-
-        CConnectionDataInBackBuffer(std::function<void(void*)>&& func, std::function<bool(void*)>&& checkFunc, float priority, const CEventConnectionsHandler* handler, unsigned int conInd);
+    struct SConnection {
+        std::function<void(Ts...)> Func;
+        size_t Priority = 0;
+        size_t UID = 0;
     };
-    mutable std::vector<CConnectionDataInBackBuffer> ConnectionsBackBuffer;
-public:
-    KL2_API void FireEvent(void* data);
+    std::vector<SConnection> Connections;
 
-    KL2_API ~CEvent();
+    size_t UID_Counter = 0;
+    void _UpdateUID_Counter();
+
+  public:
+    void FireEvent(Ts... vals) const;
+    [[nodiscard]] CSubscription AddConnection(size_t priority,
+                                              std::function<void(Ts...)> func);
+    void RemoveConnection(CSubscription& subscription);
+
+    CEvent() = default;
+    CEvent(CEvent const&) = delete;
+    CEvent(CEvent&&) = default;
+    CEvent& operator=(CEvent const&) = delete;
+    CEvent& operator=(CEvent&&) = default;
+    ~CEvent() = default;
 };
 
-class CEventConnectionsHandler{
-    friend class CEvent;
+#include <algorithm>
+#include <limits>
+#include <stdexcept>
 
-    mutable unsigned int IDCounter = 0;
+template <typename... Ts>
+CEvent<Ts...>::CSubscription::CSubscription(CEvent& event, size_t _UID)
+    : Event(event), UID(_UID) {}
 
-public:
-    typedef unsigned ConnectionID;
-private:
-    struct CConnectionData {
-        ConnectionID ID;
+template <typename... Ts>
+CEvent<Ts...>::CSubscription::~CSubscription() {
+    if (UID) Event.get().RemoveConnection(*this);
+}
 
-        const CEvent* Event;
-        unsigned int ConnectionInd;
+template <typename... Ts>
+void CEvent<Ts...>::FireEvent(Ts... vals) const {
+    auto consCopy = Connections;
+    for (auto const& con : consCopy) con.Func(std::forward<Ts>(vals)...);
+}
 
-        CConnectionData(ConnectionID id, const CEvent* ev, unsigned int conInd);
-    };
-    mutable std::vector<CConnectionData> Connections;
+template <typename... Ts>
+void CEvent<Ts...>::_UpdateUID_Counter() {
+    if (UID_Counter == std::numeric_limits<size_t>::max())
+        UID_Counter = 1;
+    else
+        UID_Counter++;
+}
 
-private: ConnectionID _ConnectToEvent(const CEvent* ev, float priority, unsigned int priorityInsertInd, std::function<void(void*)>&& func, std::function<bool(void*)>&& checkFunc) const;
-public:
+template <typename... Ts>
+auto CEvent<Ts...>::AddConnection(size_t priority,
+                                  std::function<void(Ts...)> func)
+    -> CSubscription {
+    auto whereToInsert =
+        std::upper_bound(Connections.begin(), Connections.end(), priority,
+                         [](size_t priority, const SConnection& con) {
+                             return con.Priority > priority;
+                         });
+    _UpdateUID_Counter();  // UID of zero is invalid, thats why this call is
+                           // here
+    Connections.insert(whereToInsert, {func, priority, UID_Counter});
+    return {*this, UID_Counter};
+}
 
-    struct SErrorsEnumWrapper :KL2::ErrorsSystem::SErrorBase {
-        enum ErrorsEnum {
-            IncorrectID,
-        };
-        ErrorsEnum Error;
-        inline SErrorsEnumWrapper(ErrorsEnum error) :Error(error) {};
-    }; using ErrorsEnum = SErrorsEnumWrapper; using AnyError = SErrorsEnumWrapper;
+#define STR(x) _STR(x)
+#define _STR(x) #x
 
-    KL2_API ConnectionID ConnectToEvent(const CEvent* ev, std::function<void(void*)>&& func) const;
-    KL2_API ConnectionID ConnectToEvent(const CEvent* ev, std::function<void(void*)>&& func, std::function<bool(void*)>&& checkFunc) const;
-    KL2_API ConnectionID ConnectToEvent(const CEvent* ev, float priority, std::function<void(void*)>&& func) const;
-    KL2_API ConnectionID ConnectToEvent(const CEvent* ev, float priority, std::function<void(void*)>&& func, std::function<bool(void*)>&& checkFunc) const;
-    KL2_API void RemoveConnection(const ConnectionID id);
-    KL2_API ~CEventConnectionsHandler();
-};
+template <typename... Ts>
+void CEvent<Ts...>::RemoveConnection(CSubscription& subscription) {
+    auto con = std::find_if(
+        Connections.begin(), Connections.end(),
+        [&](SConnection const& con) { return con.UID == subscription.UID; });
+    if (con == Connections.end())
+        throw std::invalid_argument(__FILE__
+                                    ":" STR(__LINE__) " invalid subscription");
+    else {
+        subscription.UID = 0;
+        Connections.erase(con);
+    }
+}
+
+#undef STR
+#undef _STR

@@ -1,6 +1,6 @@
 
 #include"TextRenderer.hpp"
-#include"Graphics/Primitives/Renderer.hpp"
+#include"Graphics/Renderer.hpp"
 #include"Tools/GLDebug.hpp"
 #include<algorithm>
 #ifndef KL2_DONT_USE_FREE_TYPE

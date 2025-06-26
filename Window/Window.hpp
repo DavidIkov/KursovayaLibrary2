@@ -49,8 +49,8 @@ namespace KL2::Window {
             inline SGLFW_ErrorWrapper(unsigned int errCode) :ErrCode(errCode) {};
         }; using GLFW_AnyError = SGLFW_ErrorWrapper;
 
-        KL2_API const CKeyboard& GetKeyboardHandle() const;
-        KL2_API const CMouse& GetMouseHandle() const;
+        KL2_API CKeyboard& GetKeyboardHandle();
+        KL2_API CMouse& GetMouseHandle();
 
         KL2_API void ClearColorBuffer();
         KL2_API void ClearDepthBuffer();

@@ -27,10 +27,10 @@ void CWindow::ClearAllBuffers() {
     glSC(glClear, GL_STENCIL_BUFFER_BIT);
 }
 
-const CKeyboard& CWindow::GetKeyboardHandle() const {
+CKeyboard& CWindow::GetKeyboardHandle() {
     return KeyboardHandle;
 }
-const CMouse& CWindow::GetMouseHandle() const {
+CMouse& CWindow::GetMouseHandle() {
     return MouseHandle;
 }
 

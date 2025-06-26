@@ -6,7 +6,6 @@ add_library(KL2 STATIC
     KL2_Manager.hpp
     Tools/ErrorsSystem.cpp
     Tools/ErrorsSystem.hpp
-    Tools/Event.cpp
     Tools/Event.hpp
     Window/Window.cpp
     Window/Window.hpp
